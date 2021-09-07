@@ -15,7 +15,9 @@ export const resolvers: Resolvers = {
 
             return {
                 launches,
-                cursor: launches.length ? launches[0].cursor : null,
+                cursor: launches.length
+                    ? launches[launches.length - 1].cursor
+                    : null,
                 hasMore: launches.length
                     ? launches[launches.length - 1].cursor !==
                       allLaunches[allLaunches.length - 1].cursor
@@ -97,7 +99,7 @@ export const resolvers: Resolvers = {
         },
     },
 
-    User: {
+    UserProfile: {
         trips: async (_, __, { dataSources }) => {
             const launchIds = await dataSources.userAPI.getLaunchIdsByUser();
 
