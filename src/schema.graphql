@@ -1,0 +1,54 @@
+type Query {
+    launches(pageSize: Int, after: Int): LaunchConnection!
+    launch(id: ID!): Launch
+    userProfile: User
+}
+
+type Mutation {
+    login(email: String): User
+    bookTrips(launchIds: [ID]!): TripUpdateResponse!
+    cancelTrip(launchId: ID!): TripUpdateResponse!
+}
+
+type User {
+    id: ID!
+    email: String!
+    token: String
+    trips: [Launch]!
+}
+
+type LaunchConnection {
+    cursor: Int
+    hasMore: Boolean!
+    launches: [Launch]!
+}
+
+type Launch {
+    id: ID!
+    site: String
+    isBooked: Boolean!
+    mission: Mission
+    rocket: Rocket
+}
+
+type Rocket {
+    id: ID!
+    name: String
+    type: String
+}
+
+type Mission {
+    name: String
+    missionPatch(size: PatchSize): String
+}
+
+type TripUpdateResponse {
+    success: Boolean!
+    message: String
+    launches: [Launch]
+}
+
+enum PatchSize {
+    SMALL
+    LARGE
+}
