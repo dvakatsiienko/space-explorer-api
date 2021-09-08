@@ -5,8 +5,7 @@
     "main": "src/index.js",
     "scripts": {
         "start": "ts-node-dev --rs src",
-        "start:ci": "ts-node src",
-        "test": "jest"
+        "start:ci": "ts-node src"
     },
     "dependencies": {
         "apollo-datasource": "3.1.0",
@@ -26,16 +25,9 @@
         "apollo": "2.33.6",
         "apollo-link": "1.2.14",
         "apollo-link-http": "1.5.17",
-        "jest": "23.6.0",
         "node-fetch": "3.0.0",
         "ts-node": "10.2.1",
         "ts-node-dev": "1.1.8",
         "typescript": "4.4.2"
-    },
-    "jest": {
-        "testPathIgnorePatterns": [
-            "/node_modules/",
-            "/__utils"
-        ]
     }
 }
