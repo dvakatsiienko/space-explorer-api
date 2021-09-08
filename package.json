@@ -8,6 +8,8 @@
         "start:ci": "ts-node src"
     },
     "dependencies": {
+        "@graphql-tools/graphql-file-loader": "7.1.0",
+        "@graphql-tools/load": "7.3.0",
         "apollo-datasource": "3.1.0",
         "apollo-datasource-rest": "3.2.0",
         "apollo-server": "3.3.0",
@@ -15,11 +17,9 @@
         "graphql": "15.5.3",
         "isemail": "3.2.0",
         "sequelize": "5.15.1",
+        "sqlite3": "5.0.2",
         "ts-node": "10.2.1",
-        "ts-node-dev": "1.1.8",
-        "@graphql-tools/graphql-file-loader": "7.1.0",
-        "@graphql-tools/load": "7.3.0",
-        "sqlite3": "5.0.2"
+        "ts-node-dev": "1.1.8"
     },
     "devDependencies": {
         "@types/node": "16.7.13",

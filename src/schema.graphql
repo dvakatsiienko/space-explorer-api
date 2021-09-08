@@ -13,7 +13,7 @@ type Mutation {
 type UserProfile {
     id: ID!
     email: String!
-    token: String!
+    token: String
     trips: [Launch!]!
 }
 
