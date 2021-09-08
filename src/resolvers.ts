@@ -51,12 +51,12 @@ export const resolvers: Resolvers = {
             });
 
             return {
-                success: results && results.length === launchIds.length,
+                success: results?.length === launchIds.length,
                 message:
-                    results.length === launchIds.length
+                    results?.length === launchIds?.length
                         ? 'trips booked successfully'
                         : `the following launches couldn't be booked: ${launchIds.filter(
-                              (id: string) => !results.includes(id),
+                              (id: string) => !results?.includes(id),
                           )}`,
                 launches,
             };
