@@ -4,7 +4,7 @@
     "private": true,
     "main": "src/index.js",
     "scripts": {
-        "start": "ts-node src",
+        "start": "ts-node-dev --rs src",
         "start:ci": "ts-node src"
     },
     "dependencies": {
@@ -17,11 +17,11 @@
         "sequelize": "5.15.1",
         "ts-node": "10.2.1",
         "ts-node-dev": "1.1.8",
+        "@graphql-tools/graphql-file-loader": "7.1.0",
+        "@graphql-tools/load": "7.3.0",
         "sqlite3": "5.0.2"
     },
     "devDependencies": {
-        "@graphql-tools/graphql-file-loader": "7.1.0",
-        "@graphql-tools/load": "7.3.0",
         "@types/node": "16.7.13",
         "@types/sequelize": "4.28.10",
         "apollo": "2.33.6",
