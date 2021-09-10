@@ -1,11 +1,15 @@
 {
     "compilerOptions": {
-        "moduleResolution": "node",
+        /* Module resolution */
+        "baseUrl": ".",
+        "paths": { "@/*": ["src/*"] },
+
+        "moduleResolution": "Node",
         "target": "ESNext",
         "sourceMap": true,
         "outDir": "dist",
         "strict": true,
-        "lib": ["esnext", "dom"],
+        "lib": ["ESNext", "dom"],
         "esModuleInterop": true
     }
 }

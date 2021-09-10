@@ -114,6 +114,7 @@ export const resolvers: Resolvers = {
     },
 };
 
+/* Types */
 interface Resolvers {
     [key: string]: {
         [key: string]: Resolver;
