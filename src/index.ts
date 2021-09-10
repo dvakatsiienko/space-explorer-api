@@ -7,12 +7,12 @@ import isEmail from 'isemail';
 import dotenv from 'dotenv';
 import type { DocumentNode } from 'graphql';
 
-dotenv.config();
-
 /* Instruments */
 import { resolvers } from './resolvers';
 import { createStore } from './utils';
 import { LaunchAPI, UserAPI } from './datasources';
+
+dotenv.config();
 
 const store = createStore();
 
@@ -20,7 +20,7 @@ const schema = loadSchemaSync(join(__dirname, './schema.graphql'), {
     loaders: [new GraphQLFileLoader()],
 }) as unknown as DocumentNode;
 
-const server = new ApolloServer({
+const apolloServer = new ApolloServer({
     resolvers,
     typeDefs: schema,
     context: async expressCtx => {
@@ -45,10 +45,13 @@ const server = new ApolloServer({
     }),
 });
 
-server.listen({ port: process.env.PORT || 4000 }).then(() => {
-    console.log(`
-      Server is running!
-      Listening on port ${process.env.PORT || 4000}
-      Explore at https://studio.apollographql.com/sandbox
-    `);
+apolloServer.listen({ port: process.env.PORT }).then(() => {
+    const { PORT } = process.env;
+
+    console.log(
+        `🚀 Server ready at http://localhost:${PORT}${apolloServer.graphqlPath}`,
+    );
+    console.log(
+        `🚀 Subscription endpoint ready at ws://localhost:${PORT}${apolloServer.graphqlPath}`,
+    );
 });

@@ -4,8 +4,7 @@
     "private": true,
     "main": "src/index.js",
     "scripts": {
-        "start": "ts-node-dev --rs src",
-        "start:ci": "ts-node src"
+        "start": "ts-node-dev --rs src"
     },
     "dependencies": {
         "@graphql-tools/graphql-file-loader": "7.1.0",
