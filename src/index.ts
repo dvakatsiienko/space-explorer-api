@@ -45,9 +45,9 @@ const apolloServer = new ApolloServer({
     }),
 });
 
-apolloServer.listen({ port: process.env.PORT }).then(() => {
-    const { PORT } = process.env;
+const PORT = process.env.PORT;
 
+apolloServer.listen({ port: PORT }).then(() => {
     console.log(
         `🚀 Server ready at http://localhost:${PORT}${apolloServer.graphqlPath}`,
     );
