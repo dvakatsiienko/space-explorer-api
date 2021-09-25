@@ -5,7 +5,7 @@ import { paginateResults } from './utils';
 export const resolvers: Resolvers = {
     Query: {
         launches: async (_, { pageSize = 20, after }, { dataSources }) => {
-            const allLaunches = await dataSources.launchAPI.getAllLaunches();
+            const allLaunches = await dataSources.launchAPI.getLaunches();
 
             const launches = paginateResults({
                 after,
@@ -25,7 +25,7 @@ export const resolvers: Resolvers = {
             };
         },
         launch: (_, { id }, { dataSources }) => {
-            return dataSources.launchAPI.getLaunchById(id);
+            return dataSources.launchAPI.getLaunch(id);
         },
         userProfile: (_, __, ctx) => {
             if (!ctx.userEmail) {
@@ -75,7 +75,7 @@ export const resolvers: Resolvers = {
                 };
             }
 
-            const launch = await dataSources.launchAPI.getLaunchById(launchId);
+            const launch = await dataSources.launchAPI.getLaunch(launchId);
 
             return {
                 success: true,

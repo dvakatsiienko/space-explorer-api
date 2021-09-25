@@ -37,12 +37,11 @@ const apolloServer = new ApolloServer({
 const PORT = process.env.PORT;
 
 apolloServer.listen({ port: PORT }).then(data => {
-    console.log(PORT);
-    console.log(data);
+    const isProd = process.env.NODE_ENV === 'production';
+    const protocol = isProd ? 'https' : 'http';
+    const HOST = isProd ? 'space-explorrer-api.herokuapp.com' : 'localhost';
+
     console.log(
-        `🚀 Server ready at http://localhost:${PORT}${apolloServer.graphqlPath}`,
-    );
-    console.log(
-        `🚀 Subscription endpoint ready at ws://localhost:${PORT}${apolloServer.graphqlPath}`,
+        `🚀 Server ready at ${protocol}://${HOST}:${data.port}${apolloServer.graphqlPath}`,
     );
 });
