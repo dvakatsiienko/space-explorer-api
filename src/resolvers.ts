@@ -54,8 +54,7 @@ export const resolvers: Resolvers = {
             );
 
             const success = bookedTrips?.length === launchIds.length;
-
-            console.log(bookedTrips, launches);
+            console.log(bookedTrips);
 
             return {
                 success,

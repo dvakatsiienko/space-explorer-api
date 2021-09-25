@@ -110,7 +110,7 @@ export class UserAPI extends DataSource {
         if (!user) return false;
 
         const found = await client.trip.findMany({
-            where: { id: user.id, launchId },
+            where: { userId: user.id, launchId },
         });
 
         return found && found.length > 0;
