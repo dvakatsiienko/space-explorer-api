@@ -39,7 +39,7 @@ const PORT = process.env.PORT;
 apolloServer.listen({ port: PORT }).then(data => {
     const isProd = process.env.NODE_ENV === 'production';
     const protocol = isProd ? 'https' : 'http';
-    const HOST = isProd ? 'space-explorrer-api.herokuapp.com' : 'localhost';
+    const HOST = isProd ? 'the-space-explorer-api.herokuapp.com' : 'localhost';
 
     console.log(
         `🚀 Server ready at ${protocol}://${HOST}:${data.port}${apolloServer.graphqlPath}`,
