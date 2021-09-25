@@ -1,2 +1,2 @@
-export { LaunchAPI } from './launch';
-export { UserAPI } from './user';
+export { LaunchAPI } from './LaunchAPI';
+export { UserAPI } from './UserAPI';

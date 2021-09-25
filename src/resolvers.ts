@@ -25,44 +25,48 @@ export const resolvers: Resolvers = {
             };
         },
         launch: (_, { id }, { dataSources }) => {
-            return dataSources.launchAPI.getLaunchById({ launchId: id });
+            return dataSources.launchAPI.getLaunchById(id);
         },
         userProfile: (_, __, ctx) => {
-            return ctx.dataSources.userAPI.findOrCreateUser(ctx?.user?.email);
+            if (!ctx.userEmail) {
+                throw new Error('No email provided.');
+            }
+
+            return ctx.dataSources.userAPI.findOrCreate(ctx.userEmail);
         },
     },
 
     Mutation: {
         login: async (_, { email }, { dataSources }) => {
-            const user = await dataSources.userAPI.findOrCreateUser(email);
+            const userProfile = await dataSources.userAPI.findOrCreate(email);
 
-            if (user) {
-                user.token = Buffer.from(email).toString('base64');
-
-                return user;
-            } else {
-                return null;
-            }
+            return userProfile;
         },
-        bookTrips: async (_, { launchIds }, { dataSources }) => {
-            const results = await dataSources.userAPI.bookTrips({ launchIds });
-            const launches = await dataSources.launchAPI.getLaunchesByIds({
+        // @ts-ignore
+        bookTrips: async (
+            _,
+            { launchIds }: { launchIds: number[] },
+            { dataSources },
+        ) => {
+            const bookedTrips = await dataSources.userAPI.bookTrips(launchIds);
+            const launches = await dataSources.launchAPI.getLaunchesByIds(
                 launchIds,
-            });
+            );
+
+            const success = bookedTrips?.length === launchIds.length;
 
             return {
-                success: results?.length === launchIds.length,
-                message:
-                    results?.length === launchIds?.length
-                        ? 'trips booked successfully'
-                        : `the following launches couldn't be booked: ${launchIds.filter(
-                              (id: string) => !results?.includes(id),
-                          )}`,
+                success,
+                message: success
+                    ? 'trips booked successfully'
+                    : `the following launches couldn't be booked: ${launchIds.filter(
+                          id => !bookedTrips?.filter(trip => trip.id === id),
+                      )}`,
                 launches,
             };
         },
         cancelTrip: async (_, { launchId }, { dataSources }) => {
-            const result = await dataSources.userAPI.cancelTrip({ launchId });
+            const result = await dataSources.userAPI.cancelTrip(launchId);
 
             if (!result) {
                 return {
@@ -71,9 +75,7 @@ export const resolvers: Resolvers = {
                 };
             }
 
-            const launch = await dataSources.launchAPI.getLaunchById({
-                launchId,
-            });
+            const launch = await dataSources.launchAPI.getLaunchById(launchId);
 
             return {
                 success: true,
@@ -85,9 +87,7 @@ export const resolvers: Resolvers = {
 
     Launch: {
         isBooked: async (launch: any, _, { dataSources }) => {
-            return dataSources.userAPI.isBookedOnLaunch({
-                launchId: launch.id,
-            });
+            return dataSources.userAPI.isBookedOnLaunch(launch.id);
         },
     },
 
@@ -101,15 +101,11 @@ export const resolvers: Resolvers = {
 
     UserProfile: {
         trips: async (_, __, { dataSources }) => {
-            const launchIds = await dataSources.userAPI.getLaunchIdsByUser();
+            const launchIds = await dataSources.userAPI.getLaunchIds();
 
             if (!launchIds.length) return [];
 
-            return (
-                dataSources.launchAPI.getLaunchesByIds({
-                    launchIds,
-                }) || []
-            );
+            return dataSources.launchAPI.getLaunchesByIds(launchIds);
         },
     },
 };

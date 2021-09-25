@@ -9,12 +9,9 @@ import type { DocumentNode } from 'graphql';
 
 /* Instruments */
 import { resolvers } from './resolvers';
-import { createStore } from './utils';
 import { LaunchAPI, UserAPI } from './datasources';
 
-dotenv.config();
-
-const store = createStore();
+dotenv.config({ path: '.env.development.local' });
 
 const schema = loadSchemaSync(join(__dirname, './schema.graphql'), {
     loaders: [new GraphQLFileLoader()],
@@ -27,27 +24,19 @@ const apolloServer = new ApolloServer({
         const { req } = expressCtx;
 
         const auth = req.headers?.authorization ?? '';
-        const email = Buffer.from(auth, 'base64').toString('ascii');
+        const userEmail = Buffer.from(auth, 'base64').toString('ascii');
 
-        if (!isEmail.validate(email)) return { user: null };
-
-        const [foundUser] = await store.users.findOrCreate({
-            where: { email },
-        });
-
-        const user = { ...foundUser.dataValues };
-
-        return { user };
+        return { userEmail: isEmail.validate(userEmail) ? userEmail : null };
     },
     dataSources: () => ({
         launchAPI: new LaunchAPI(),
-        userAPI: new UserAPI({ store }),
+        userAPI: new UserAPI(),
     }),
 });
 
 const PORT = process.env.PORT;
 
-apolloServer.listen({ port: PORT }).then(() => {
+apolloServer.listen().then(() => {
     console.log(
         `🚀 Server ready at http://localhost:${PORT}${apolloServer.graphqlPath}`,
     );
