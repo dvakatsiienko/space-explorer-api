@@ -1,5 +1,5 @@
 type Query {
-    launches(pageSize: Int, after: Int): LaunchConnection!
+    launches(pageSize: Int, after: Int): Launches!
     launch(id: ID!): Launch!
     userProfile: UserProfile
 }
@@ -17,15 +17,16 @@ type UserProfile {
     trips: [Launch!]!
 }
 
-type LaunchConnection {
+type Launches {
     cursor: Int!
     hasMore: Boolean!
-    launches: [Launch!]!
+    list: [Launch!]!
 }
 
 type Launch {
     id: ID!
     site: String!
+    flightNumber: Int!
     isBooked: Boolean!
     mission: Mission!
     rocket: Rocket!

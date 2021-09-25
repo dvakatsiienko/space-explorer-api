@@ -1,3 +1,13 @@
+/* Instruments */
+import { LaunchModel } from './datasources';
+
+interface Options {
+    after: number;
+    pageSize: number;
+    results: LaunchModel[];
+    getCursor?: () => null;
+}
+
 export const paginateResults = ({
     // @ts-ignore
     after: cursor,
@@ -5,7 +15,7 @@ export const paginateResults = ({
     // @ts-ignore
     results,
     getCursor = () => null,
-}) => {
+}: Options) => {
     if (pageSize < 1) return [];
 
     if (!cursor) return results.slice(0, pageSize);

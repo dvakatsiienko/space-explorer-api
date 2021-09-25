@@ -67,15 +67,9 @@ export class UserAPI extends DataSource {
             return null;
         }
 
-        let trip = await client.trip.findUnique({
-            where: { launchId, userId: user?.id },
+        const trip = await client.trip.create({
+            data: { launchId, userId: user.id },
         });
-
-        if (trip === null) {
-            trip = await client.trip.create({
-                data: { launchId, userId: user?.id },
-            });
-        }
 
         return trip;
     }

@@ -1,102 +1,3 @@
-/* Core */
-import { RESTDataSource } from 'apollo-datasource-rest';
-
-export class LaunchAPI extends RESTDataSource {
-    constructor() {
-        super();
-
-        this.baseURL = 'https://api.spacexdata.com';
-    }
-
-    async getLaunches() {
-        const launches: Launch[] = await this.get('/v5/launches');
-
-        const rockets = await Promise.all(
-            launches.map(launch => this.get(`/v4/rockets?id=${launch.rocket}`)),
-        );
-
-        const launchpads = await Promise.all(
-            launches.map(launch =>
-                this.get(`/v4/launchpads?id=${launch.launchpad}`),
-            ),
-        );
-
-        const launchesModels = launches.map(
-            launch =>
-                new LaunchModel(launch, rockets.flat(), launchpads.flat()),
-        );
-
-        return launchesModels;
-    }
-
-    async getLaunch(id: string) {
-        const launch: Launch = await this.get(`/v5/launches/${id}`);
-
-        const rocket = await this.get(`/v4/rockets/${launch.rocket}`);
-        const launchpad = await this.get(`/v4/launchpads/${launch.launchpad}`);
-
-        const launchModel = new LaunchModel(launch, [rocket], [launchpad]);
-
-        return launchModel;
-    }
-
-    getLaunchesByIds(launchIds: string[]) {
-        return Promise.all(launchIds.map(id => this.getLaunch(id)));
-    }
-}
-
-class LaunchModel {
-    id: string;
-    cursor: number;
-    site: string;
-    mission: {
-        name: string;
-        missionPatchSmall: string;
-        missionPatchLarge: string;
-    };
-    rocket: {
-        id: string;
-        name: string;
-        type: string;
-    };
-
-    constructor(launch: Launch, rockets: Rocket[], launchpads: Launchpad[]) {
-        this.id = launch.id;
-        this.cursor = launch.flight_number;
-
-        const launchpad = launchpads.find(
-            launchpad => launchpad.id === launch.launchpad,
-        );
-
-        if (!launchpad) {
-            throw new Error(
-                `Launchpad for a ${launch.name} launch was not found!`,
-            );
-        }
-
-        this.site = launchpad.name;
-        this.mission = {
-            name: launch.name,
-            missionPatchSmall: launch.links.patch.small,
-            missionPatchLarge: launch.links.patch.large,
-        };
-
-        const rocket = rockets.find(rocket => rocket.id === launch.rocket);
-
-        if (!rocket) {
-            throw new Error(`Rocket for ${launch.name} launch was not found!`);
-        }
-
-        this.rocket = {
-            id: rocket.id,
-            name: rocket.name,
-            type: rocket.type,
-        };
-    }
-}
-
-/* Types */
-// !Launch
 export interface Launch {
     fairings: null;
     links: Links;
@@ -166,7 +67,6 @@ export interface Reddit {
     recovery: null;
 }
 
-// !Rocket
 export interface Rocket {
     height: Diameter;
     diameter: Diameter;
@@ -266,7 +166,6 @@ export interface CompositeFairing {
     diameter: Diameter;
 }
 
-// !Launchpad
 export interface Launchpad {
     name: string;
     full_name: string;

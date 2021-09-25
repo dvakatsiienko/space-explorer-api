@@ -1,2 +1,2 @@
-export { LaunchAPI } from './LaunchAPI';
+export { SpaceXAPI, LaunchModel } from './SpaceXAPI';
 export { UserAPI } from './UserAPI';

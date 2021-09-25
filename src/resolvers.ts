@@ -5,7 +5,7 @@ import { paginateResults } from './utils';
 export const resolvers: Resolvers = {
     Query: {
         launches: async (_, { pageSize = 20, after }, { dataSources }) => {
-            const allLaunches = await dataSources.launchAPI.getLaunches();
+            const allLaunches = await dataSources.spaceXAPI.getLaunches();
 
             const launches = paginateResults({
                 after,
@@ -14,18 +14,18 @@ export const resolvers: Resolvers = {
             });
 
             return {
-                launches,
+                list: launches,
                 cursor: launches.length
-                    ? launches[launches.length - 1].cursor
+                    ? launches[launches.length - 1].flightNumber
                     : null,
                 hasMore: launches.length
-                    ? launches[launches.length - 1].cursor !==
-                      allLaunches[allLaunches.length - 1].cursor
+                    ? launches[launches.length - 1].flightNumber !==
+                      allLaunches[allLaunches.length - 1].flightNumber
                     : false,
             };
         },
         launch: (_, { id }, { dataSources }) => {
-            return dataSources.launchAPI.getLaunch(id);
+            return dataSources.spaceXAPI.getLaunch(id);
         },
         userProfile: (_, __, ctx) => {
             if (!ctx.userEmail) {
@@ -49,11 +49,13 @@ export const resolvers: Resolvers = {
             { dataSources },
         ) => {
             const bookedTrips = await dataSources.userAPI.bookTrips(launchIds);
-            const launches = await dataSources.launchAPI.getLaunchesByIds(
+            const launches = await dataSources.spaceXAPI.getLaunchesByIds(
                 launchIds,
             );
 
             const success = bookedTrips?.length === launchIds.length;
+
+            console.log(bookedTrips, launches);
 
             return {
                 success,
@@ -78,7 +80,7 @@ export const resolvers: Resolvers = {
                 };
             }
 
-            const launch = await dataSources.launchAPI.getLaunch(launchId);
+            const launch = await dataSources.spaceXAPI.getLaunch(launchId);
 
             return {
                 success: true,
@@ -108,7 +110,7 @@ export const resolvers: Resolvers = {
 
             if (!launchIds.length) return [];
 
-            return dataSources.launchAPI.getLaunchesByIds(launchIds);
+            return dataSources.spaceXAPI.getLaunchesByIds(launchIds);
         },
     },
 };

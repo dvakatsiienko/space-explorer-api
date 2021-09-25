@@ -9,18 +9,18 @@ generator client {
 
 model User {
   id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
   email     String   @unique
   token     String?
   trips     Trip[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Trip {
   id        Int      @id @default(autoincrement())
+  launchId  String   @unique
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  launchId  String @unique
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int @unique
 }

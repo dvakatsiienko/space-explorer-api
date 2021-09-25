@@ -1,7 +1,8 @@
 /* Core */
 import { GraphQLFieldResolver } from 'graphql';
 
-import { LaunchAPI, UserAPI } from './datasources';
+/* Instruments */
+import { SpaceXAPI, UserAPI } from '../datasources';
 
 export type Resolver<
     TSource = unknown,
@@ -11,7 +12,7 @@ export type Resolver<
     {
         userEmail: string | null;
         dataSources: {
-            launchAPI: LaunchAPI;
+            spaceXAPI: SpaceXAPI;
             userAPI: UserAPI;
         };
     },

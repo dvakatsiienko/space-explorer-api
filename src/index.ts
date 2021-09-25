@@ -9,7 +9,7 @@ import type { DocumentNode } from 'graphql';
 
 /* Instruments */
 import { resolvers } from './resolvers';
-import { LaunchAPI, UserAPI } from './datasources';
+import { SpaceXAPI, UserAPI } from './datasources';
 
 dotenv.config({ path: '.env.development.local' });
 
@@ -29,7 +29,7 @@ const apolloServer = new ApolloServer({
         return { userEmail: isEmail.validate(userEmail) ? userEmail : null };
     },
     dataSources: () => ({
-        launchAPI: new LaunchAPI(),
+        spaceXAPI: new SpaceXAPI(),
         userAPI: new UserAPI(),
     }),
 });
