@@ -38,7 +38,7 @@ export class UserAPI extends DataSource {
         return user;
     }
 
-    async bookTrips(launchIds: number[]) {
+    async bookTrips(launchIds: string[]) {
         if (!this.context.userEmail) {
             return null;
         }
@@ -46,7 +46,7 @@ export class UserAPI extends DataSource {
         let results = [];
 
         for (const launchId of launchIds) {
-            const res = await this.bookTrip({ launchId });
+            const res = await this.bookTrip(launchId);
 
             if (res) results.push(res);
         }
@@ -54,7 +54,7 @@ export class UserAPI extends DataSource {
         return results;
     }
 
-    async bookTrip({ launchId }: { launchId: number }) {
+    async bookTrip(launchId: string) {
         if (!launchId || !this.context.userEmail) {
             return null;
         }
@@ -80,7 +80,7 @@ export class UserAPI extends DataSource {
         return trip;
     }
 
-    async cancelTrip(launchId: number) {
+    async cancelTrip(launchId: string) {
         const isCanceled = await client.trip.delete({
             where: { launchId },
         });
@@ -105,7 +105,7 @@ export class UserAPI extends DataSource {
         return userTrips.map(trip => trip.launchId);
     }
 
-    async isBookedOnLaunch(launchId: number) {
+    async isBookedOnLaunch(launchId: string) {
         if (this.context.userEmail === null) return false;
 
         const user = await client.user.findUnique({

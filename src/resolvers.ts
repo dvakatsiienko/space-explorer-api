@@ -45,7 +45,7 @@ export const resolvers: Resolvers = {
         // @ts-ignore
         bookTrips: async (
             _,
-            { launchIds }: { launchIds: number[] },
+            { launchIds }: { launchIds: string[] },
             { dataSources },
         ) => {
             const bookedTrips = await dataSources.userAPI.bookTrips(launchIds);
@@ -60,7 +60,10 @@ export const resolvers: Resolvers = {
                 message: success
                     ? 'trips booked successfully'
                     : `the following launches couldn't be booked: ${launchIds.filter(
-                          id => !bookedTrips?.filter(trip => trip.id === id),
+                          id =>
+                              !bookedTrips?.filter(
+                                  trip => String(trip.id) === id,
+                              ),
                       )}`,
                 launches,
             };

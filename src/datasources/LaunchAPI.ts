@@ -9,39 +9,43 @@ export class LaunchAPI extends RESTDataSource {
     }
 
     async getLaunches() {
-        const response: TLaunch[] = await this.get('/v5/launches');
+        const launches: Launch[] = await this.get('/v5/launches');
 
         const rockets = await Promise.all(
-            response.map(launch => this.get(`/v4/rockets?id=${launch.rocket}`)),
+            launches.map(launch => this.get(`/v4/rockets?id=${launch.rocket}`)),
         );
 
-        // console.log(rockets.length);
-        // console.log(rockets.flat().length);
-        // console.log(rockets[0]);
+        const launchpads = await Promise.all(
+            launches.map(launch =>
+                this.get(`/v4/launchpads?id=${launch.launchpad}`),
+            ),
+        );
 
-        // console.log(response[0]);
+        const launchesModels = launches.map(
+            launch =>
+                new LaunchModel(launch, rockets.flat(), launchpads.flat()),
+        );
 
-        return Array.isArray(response)
-            ? response.map(launch => new Launch(launch, rockets.flat()))
-            : [];
+        return launchesModels;
     }
 
-    async getLaunch(id: number) {
-        const [launch]: TLaunch[] = await this.get('launches', {
-            flight_number: id,
-        });
+    async getLaunch(id: string) {
+        const launch: Launch = await this.get(`/v5/launches/${id}`);
 
-        const rocket = await this.get(`/v4/rockets?id=${launch.rocket}`);
+        const rocket = await this.get(`/v4/rockets/${launch.rocket}`);
+        const launchpad = await this.get(`/v4/launchpads/${launch.launchpad}`);
 
-        return new Launch(launch, [rocket]);
+        const launchModel = new LaunchModel(launch, [rocket], [launchpad]);
+
+        return launchModel;
     }
 
-    getLaunchesByIds(launchIds: number[]) {
+    getLaunchesByIds(launchIds: string[]) {
         return Promise.all(launchIds.map(id => this.getLaunch(id)));
     }
 }
 
-class Launch {
+class LaunchModel {
     id: string;
     cursor: number;
     site: string;
@@ -56,28 +60,32 @@ class Launch {
         type: string;
     };
 
-    constructor(launch: TLaunch, rockets: TRocket[]) {
+    constructor(launch: Launch, rockets: Rocket[], launchpads: Launchpad[]) {
         this.id = launch.id;
         this.cursor = launch.flight_number;
-        // @ts-ignore
-        this.site = launch.launch_site && launch.launch_site.site_name;
+
+        const launchpad = launchpads.find(
+            launchpad => launchpad.id === launch.launchpad,
+        );
+
+        if (!launchpad) {
+            throw new Error(
+                `Launchpad for a ${launch.name} launch was not found!`,
+            );
+        }
+
+        this.site = launchpad.name;
         this.mission = {
-            // @ts-ignore
-            name: launch.mission_name,
+            name: launch.name,
             missionPatchSmall: launch.links.patch.small,
             missionPatchLarge: launch.links.patch.large,
         };
 
         const rocket = rockets.find(rocket => rocket.id === launch.rocket);
-        console.log('found', rocket);
 
         if (!rocket) {
-            throw new Error(
-                `Rocket for a launch ${launch.name} was not found!`,
-            );
+            throw new Error(`Rocket for ${launch.name} launch was not found!`);
         }
-
-        console.log('...');
 
         this.rocket = {
             id: rocket.id,
@@ -89,7 +97,7 @@ class Launch {
 
 /* Types */
 // !Launch
-export interface TLaunch {
+export interface Launch {
     fairings: null;
     links: Links;
     static_fire_date_utc: Date;
@@ -159,7 +167,7 @@ export interface Reddit {
 }
 
 // !Rocket
-export interface TRocket {
+export interface Rocket {
     height: Diameter;
     diameter: Diameter;
     mass: Mass;
@@ -256,4 +264,21 @@ export interface Payloads {
 export interface CompositeFairing {
     height: Diameter;
     diameter: Diameter;
+}
+
+// !Launchpad
+export interface Launchpad {
+    name: string;
+    full_name: string;
+    locality: string;
+    region: string;
+    timezone: string;
+    latitude: number;
+    longitude: number;
+    launch_attempts: number;
+    launch_successes: number;
+    rockets: string[];
+    launches: string[];
+    status: string;
+    id: string;
 }
