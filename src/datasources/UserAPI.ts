@@ -1,6 +1,5 @@
 /* Core */
 import { DataSource, DataSourceConfig } from 'apollo-datasource';
-import isEmail from 'isemail';
 import { PrismaClient } from '@prisma/client';
 
 const client = new PrismaClient();
