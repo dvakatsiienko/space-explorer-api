@@ -1,2 +1,2 @@
 export * from './resolvers';
-export * from './spaceXAPI';
+export * from './spaceXAPI_';
