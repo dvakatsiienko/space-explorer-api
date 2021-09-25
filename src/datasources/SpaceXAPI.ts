@@ -2,7 +2,7 @@
 import { RESTDataSource } from 'apollo-datasource-rest';
 
 /* Instruments */
-import { Launch, Rocket, Launchpad } from '../types/SpaceXAPI';
+import { Launch, Rocket, Launchpad } from '../types';
 
 export class SpaceXAPI extends RESTDataSource {
     constructor() {
