@@ -9,10 +9,8 @@ interface Options {
 }
 
 export const paginateResults = ({
-    // @ts-ignore
     after: cursor,
     pageSize = 20,
-    // @ts-ignore
     results,
     getCursor = () => null,
 }: Options) => {
@@ -20,15 +18,11 @@ export const paginateResults = ({
 
     if (!cursor) return results.slice(0, pageSize);
 
-    // @ts-ignore
     const cursorIndex = results.findIndex(item => {
-        // @ts-ignore
-        let itemCursor = item.cursor ? item.cursor : getCursor(item);
+        let itemCursor = item.flightNumber ? item.flightNumber : getCursor();
 
         return itemCursor ? cursor === itemCursor : false;
     });
-
-    // console.log(cursorIndex);
 
     if (cursorIndex >= 0) {
         if (cursorIndex === results.length - 1) {

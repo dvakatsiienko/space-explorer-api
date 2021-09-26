@@ -1,6 +1,6 @@
 /* Core */
-import { ApolloServer } from 'apollo-server';
 import { join } from 'path';
+import { ApolloServer } from 'apollo-server';
 import { loadSchemaSync } from '@graphql-tools/load';
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
 import isEmail from 'isemail';
@@ -14,13 +14,13 @@ import { SpaceXAPI, UserAPI } from './datasources';
 dotenv.config({ path: '.env.development.local' });
 
 const schema = loadSchemaSync(join(__dirname, './schema.graphql'), {
-    loaders: [new GraphQLFileLoader()],
+    loaders: [ new GraphQLFileLoader() ],
 }) as unknown as DocumentNode;
 
 const apolloServer = new ApolloServer({
     resolvers,
     typeDefs: schema,
-    context: async expressCtx => {
+    context:  async expressCtx => {
         const { req } = expressCtx;
 
         const auth = req.headers?.authorization ?? '';
@@ -30,11 +30,11 @@ const apolloServer = new ApolloServer({
     },
     dataSources: () => ({
         spaceXAPI: new SpaceXAPI(),
-        userAPI: new UserAPI(),
+        userAPI:   new UserAPI(),
     }),
 });
 
-const PORT = process.env.PORT;
+const { PORT } = process.env;
 
 apolloServer.listen({ port: PORT }).then(data => {
     const isProd = process.env.NODE_ENV === 'production';

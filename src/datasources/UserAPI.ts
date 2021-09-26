@@ -40,23 +40,19 @@ export class UserAPI extends DataSource {
 
     async bookTrips(launchIds: string[]) {
         if (!this.context.userEmail) {
-            return null;
+            throw new Error('Not authenticated.');
         }
 
-        let results = [];
-
-        for (const launchId of launchIds) {
-            const res = await this.bookTrip(launchId);
-
-            if (res) results.push(res);
-        }
+        const results = await Promise.all(
+            launchIds.map(launchId => this.bookTrip(launchId)),
+        );
 
         return results;
     }
 
     async bookTrip(launchId: string) {
         if (!launchId || !this.context.userEmail) {
-            return null;
+            throw new Error('Not authenticated.');
         }
 
         const user = await client.user.findUnique({
@@ -64,7 +60,7 @@ export class UserAPI extends DataSource {
         });
 
         if (user === null) {
-            return null;
+            throw new Error('User not found.');
         }
 
         const trip = await client.trip.create({
@@ -88,7 +84,7 @@ export class UserAPI extends DataSource {
         }
 
         const user = await client.user.findUnique({
-            where: { email: this.context.userEmail },
+            where:   { email: this.context.userEmail },
             include: { trips: true },
         });
 
@@ -103,7 +99,7 @@ export class UserAPI extends DataSource {
         if (this.context.userEmail === null) return false;
 
         const user = await client.user.findUnique({
-            where: { email: this.context.userEmail },
+            where:   { email: this.context.userEmail },
             include: { trips: true },
         });
 

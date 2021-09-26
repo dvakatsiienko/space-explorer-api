@@ -14,13 +14,13 @@ export const resolvers: Resolvers = {
             });
 
             return {
-                list: launches,
+                list:   launches,
                 cursor: launches.length
-                    ? launches[launches.length - 1].flightNumber
+                    ? launches[ launches.length - 1 ].flightNumber
                     : null,
                 hasMore: launches.length
-                    ? launches[launches.length - 1].flightNumber !==
-                      allLaunches[allLaunches.length - 1].flightNumber
+                    ? launches[ launches.length - 1 ].flightNumber
+                      !== allLaunches[ allLaunches.length - 1 ].flightNumber
                     : false,
             };
         },
@@ -54,18 +54,16 @@ export const resolvers: Resolvers = {
             );
 
             const success = bookedTrips?.length === launchIds.length;
-            console.log(bookedTrips);
 
             return {
                 success,
                 message: success
                     ? 'trips booked successfully'
                     : `the following launches couldn't be booked: ${launchIds.filter(
-                          id =>
-                              !bookedTrips?.filter(
-                                  trip => String(trip.id) === id,
-                              ),
-                      )}`,
+                        id => !bookedTrips?.filter(
+                            trip => String(trip.id) === id,
+                        ),
+                    )}`,
                 launches,
             };
         },
@@ -82,9 +80,9 @@ export const resolvers: Resolvers = {
             const launch = await dataSources.spaceXAPI.getLaunch(launchId);
 
             return {
-                success: true,
-                message: 'trip cancelled',
-                launches: [launch],
+                success:  true,
+                message:  'trip cancelled',
+                launches: [ launch ],
             };
         },
     },
