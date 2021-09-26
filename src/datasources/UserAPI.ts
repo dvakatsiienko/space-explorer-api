@@ -59,11 +59,17 @@ export class UserAPI extends DataSource<ApolloCtx> {
             throw new Error('User not found.');
         }
 
+        console.log(launchId, user.id);
+
+        // try {
         const trip = await client.trip.create({
             data: { launchId, userId: user.id },
         });
 
         return trip;
+        // } catch (error) {
+        //     console.log(error);
+        // }
     }
 
     async cancelTrip(launchId: string) {
