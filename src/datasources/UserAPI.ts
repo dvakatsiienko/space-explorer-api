@@ -22,24 +22,18 @@ export class UserAPI extends DataSource<ApolloCtx> {
         await client.$connect();
     }
 
-    async find() {
-        const email = this.validateAuth();
+    async find(email: string | null) {
+        if (!email) {
+            throw new Error('Email is null!');
+        }
 
-        const user = await client.user.findUnique({
+        let user = await client.user.findUnique({
             where: { email },
         });
 
         if (user === null) {
-            throw new Error('User not found.');
+            user = await client.user.create({ data: { email } });
         }
-
-        user.token = Buffer.from(email).toString('base64');
-
-        return user;
-    }
-
-    async createUser(email: string) {
-        const user = await client.user.create({ data: { email } });
 
         user.token = Buffer.from(email).toString('base64');
 

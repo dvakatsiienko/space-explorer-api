@@ -27,7 +27,7 @@ export const Query: TQuery = {
         return dataSources.spaceXAPI.getLaunch(id);
     },
     userProfile: (_, __, ctx) => {
-        return ctx.dataSources.userAPI.find();
+        return ctx.dataSources.userAPI.find(ctx.userEmail);
     },
 };
 

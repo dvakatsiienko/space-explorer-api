@@ -3,7 +3,7 @@ import { Resolver } from '../types';
 
 export const Mutation: TMutation = {
     login: async (_, args, { dataSources }) => {
-        const userProfile = await dataSources.userAPI.createUser(args.email);
+        const userProfile = await dataSources.userAPI.find(args.email);
 
         return userProfile;
     },
