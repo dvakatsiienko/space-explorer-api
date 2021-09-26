@@ -19,7 +19,7 @@ model User {
 model Trip {
   id        Int      @id @default(autoincrement())
   launchId  String   @unique
-  userId    Int      @unique
+  userId    Int
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

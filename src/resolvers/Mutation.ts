@@ -3,7 +3,7 @@ import { Resolver } from '../types';
 
 export const Mutation: TMutation = {
     login: async (_, args, { dataSources }) => {
-        const userProfile = await dataSources.userAPI.findOrCreate(args.email);
+        const userProfile = await dataSources.userAPI.createUser(args.email);
 
         return userProfile;
     },
@@ -15,14 +15,14 @@ export const Mutation: TMutation = {
             launchIds,
         );
 
-        const success = bookedTrips?.length === launchIds.length;
+        const success = bookedTrips.length === launchIds.length;
 
         return {
             success,
             message: success
                 ? 'trips booked successfully'
                 : `the following launches couldn't be booked: ${launchIds.filter(
-                    id => !bookedTrips?.filter(trip => String(trip.id) === id),
+                    id => !bookedTrips.filter(trip => String(trip.id) === id),
                 )}`,
             launches,
         };

@@ -4,34 +4,30 @@ import { Resolver } from '../types';
 
 export const Query: TQuery = {
     launches: async (_, { pageSize = 20, after }, { dataSources }) => {
-        const allLaunches = await dataSources.spaceXAPI.getLaunches();
+        const launches = await dataSources.spaceXAPI.getLaunches();
 
-        const launches = paginate({
+        const list = paginate({
             after,
             pageSize,
-            results: allLaunches,
+            results: launches,
         });
 
         return {
-            list:   launches,
-            cursor: launches.length
-                ? launches[ launches.length - 1 ].flightNumber
-                : null,
-            hasMore: launches.length
-                ? launches[ launches.length - 1 ].flightNumber
-                  !== allLaunches[ allLaunches.length - 1 ].flightNumber
+            list,
+            cursor:  list.length ? list[ list.length - 1 ].flightNumber : null,
+            hasMore: list.length
+                ? list[ list.length - 1 ].flightNumber
+                  !== launches[ launches.length - 1 ].flightNumber
                 : false,
         };
     },
-    launch: (_, { id }, { dataSources }) => {
+    launch: (_, args, { dataSources }) => {
+        const { id } = args;
+
         return dataSources.spaceXAPI.getLaunch(id);
     },
     userProfile: (_, __, ctx) => {
-        if (!ctx.userEmail) {
-            throw new Error('No email provided.');
-        }
-
-        return ctx.dataSources.userAPI.findOrCreate(ctx.userEmail);
+        return ctx.dataSources.userAPI.find();
     },
 };
 

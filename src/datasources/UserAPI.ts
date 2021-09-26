@@ -2,14 +2,13 @@
 import { DataSource, DataSourceConfig } from 'apollo-datasource';
 import { PrismaClient } from '@prisma/client';
 
+/* Instruments */
+import { ApolloCtx } from '../types';
+
 const client = new PrismaClient();
 
-interface Ctx {
-    userEmail: string | null;
-}
-
-export class UserAPI extends DataSource {
-    context: Ctx = { userEmail: null };
+export class UserAPI extends DataSource<ApolloCtx> {
+    context: ApolloCtx = { userEmail: null };
 
     /**
      * This is a function that gets called by ApolloServer when being setup.
@@ -17,20 +16,21 @@ export class UserAPI extends DataSource {
      * like caches and context. We'll assign this.context to the request context
      * here, so we can know about the user making requests.
      */
-    async initialize(config: DataSourceConfig<Ctx>) {
+    async initialize(config: DataSourceConfig<ApolloCtx>) {
         this.context = config.context;
+
         await client.$connect();
     }
 
-    async findOrCreate(email: string) {
-        let user = await client.user.findUnique({
+    async find() {
+        const email = this.validateAuth();
+
+        const user = await client.user.findUnique({
             where: { email },
         });
 
         if (user === null) {
-            user = await client.user.create({
-                data: { email },
-            });
+            throw new Error('User not found.');
         }
 
         user.token = Buffer.from(email).toString('base64');
@@ -38,10 +38,16 @@ export class UserAPI extends DataSource {
         return user;
     }
 
+    async createUser(email: string) {
+        const user = await client.user.create({ data: { email } });
+
+        user.token = Buffer.from(email).toString('base64');
+
+        return user;
+    }
+
     async bookTrips(launchIds: string[]) {
-        if (!this.context.userEmail) {
-            throw new Error('Not authenticated.');
-        }
+        this.validateAuth();
 
         const results = await Promise.all(
             launchIds.map(launchId => this.bookTrip(launchId)),
@@ -51,13 +57,9 @@ export class UserAPI extends DataSource {
     }
 
     async bookTrip(launchId: string) {
-        if (!launchId || !this.context.userEmail) {
-            throw new Error('Not authenticated.');
-        }
+        const email = this.validateAuth();
 
-        const user = await client.user.findUnique({
-            where: { email: this.context.userEmail },
-        });
+        const user = await client.user.findUnique({ where: { email } });
 
         if (user === null) {
             throw new Error('User not found.');
@@ -71,24 +73,24 @@ export class UserAPI extends DataSource {
     }
 
     async cancelTrip(launchId: string) {
-        const isCanceled = await client.trip.delete({
-            where: { launchId },
-        });
+        this.validateAuth();
+
+        const isCanceled = await client.trip.delete({ where: { launchId } });
 
         return isCanceled;
     }
 
     async getLaunchIds() {
-        if (this.context.userEmail === null) {
-            return [];
-        }
+        const email = this.validateAuth();
 
         const user = await client.user.findUnique({
-            where:   { email: this.context.userEmail },
+            where:   { email },
             include: { trips: true },
         });
 
-        if (!user) return [];
+        if (user === null) {
+            throw new Error('User not found.');
+        }
 
         const userTrips = user.trips;
 
@@ -96,19 +98,29 @@ export class UserAPI extends DataSource {
     }
 
     async isBookedOnLaunch(launchId: string) {
-        if (this.context.userEmail === null) return false;
+        const email = this.validateAuth();
 
         const user = await client.user.findUnique({
-            where:   { email: this.context.userEmail },
+            where:   { email },
             include: { trips: true },
         });
 
-        if (!user) return false;
+        if (user === null) {
+            throw new Error('User not found.');
+        }
 
-        const found = await client.trip.findMany({
+        const userTrips = await client.trip.findMany({
             where: { userId: user.id, launchId },
         });
 
-        return found && found.length > 0;
+        return userTrips && userTrips.length > 0;
+    }
+
+    validateAuth() {
+        if (!this.context.userEmail) {
+            throw new Error('Not authenticated.');
+        }
+
+        return this.context.userEmail;
     }
 }
