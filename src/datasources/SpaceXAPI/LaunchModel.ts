@@ -1,7 +1,7 @@
 /* Instruments */
 import { Launch, Rocket, Launchpad } from './types';
 
-export class LaunchModel {
+export class LaunchModel implements TLaunchModel {
     id: string;
 
     flightNumber: number;
@@ -53,4 +53,26 @@ export class LaunchModel {
             type: rocket.type,
         };
     }
+}
+
+/* Types */
+export interface TLaunchModel {
+    id: string;
+    flightNumber: number;
+    site: string;
+
+    mission: TMission;
+    rocket: TRocket;
+}
+
+export interface TMission {
+    name: string;
+    missionPatchSmall: string;
+    missionPatchLarge: string;
+}
+
+export interface TRocket {
+    id: string;
+    name: string;
+    type: string;
 }

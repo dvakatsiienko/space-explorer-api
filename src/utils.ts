@@ -1,14 +1,7 @@
 /* Instruments */
 import { LaunchModel } from './datasources';
 
-interface Options {
-    after: number;
-    pageSize: number;
-    results: LaunchModel[];
-    getCursor?: () => null;
-}
-
-export const paginateResults = ({
+export const paginate = ({
     after: cursor,
     pageSize = 20,
     results,
@@ -19,7 +12,7 @@ export const paginateResults = ({
     if (!cursor) return results.slice(0, pageSize);
 
     const cursorIndex = results.findIndex(item => {
-        let itemCursor = item.flightNumber ? item.flightNumber : getCursor();
+        const itemCursor = item.flightNumber ? item.flightNumber : getCursor();
 
         return itemCursor ? cursor === itemCursor : false;
     });
@@ -27,13 +20,20 @@ export const paginateResults = ({
     if (cursorIndex >= 0) {
         if (cursorIndex === results.length - 1) {
             return [];
-        } else {
-            return results.slice(
-                cursorIndex + 1,
-                Math.min(results.length, cursorIndex + 1 + pageSize),
-            );
         }
-    } else {
-        return results.slice(0, pageSize);
+
+        return results.slice(
+            cursorIndex + 1,
+            Math.min(results.length, cursorIndex + 1 + pageSize),
+        );
     }
+    return results.slice(0, pageSize);
 };
+
+/* Types */
+interface Options {
+    after: number;
+    pageSize: number;
+    results: LaunchModel[];
+    getCursor?: () => null;
+}
