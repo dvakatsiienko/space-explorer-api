@@ -1,9 +1,10 @@
 /* Instruments */
+import * as gql from '../graphql';
 import { Resolver } from '../types';
 
 export const Mutation: TMutation = {
     login: async (_, args, { dataSources }) => {
-        const userProfile = await dataSources.userAPI.find(args.email);
+        const userProfile = await dataSources.userAPI.findOrCreate(args.email);
 
         return userProfile;
     },
@@ -28,11 +29,11 @@ export const Mutation: TMutation = {
         };
     },
     cancelTrip: async (_, args, { dataSources }) => {
-        const { launchId } = args;
+        const { tripId } = args;
 
-        const result = await dataSources.userAPI.cancelTrip(launchId);
+        const cancelledTrip = await dataSources.userAPI.cancelTrip(tripId);
 
-        if (!result) {
+        if (!cancelledTrip) {
             return {
                 success:  false,
                 message:  'failed to cancel trip',
@@ -40,7 +41,9 @@ export const Mutation: TMutation = {
             };
         }
 
-        const launch = await dataSources.spaceXAPI.getLaunch(launchId);
+        const launch = await dataSources.spaceXAPI.getLaunch(
+            cancelledTrip.launchId,
+        );
 
         return {
             success:  true,
@@ -52,7 +55,7 @@ export const Mutation: TMutation = {
 
 /* Types */
 interface TMutation {
-    login: Resolver<unknown, { email: string }>;
-    bookTrips: Resolver<unknown, { launchIds: string[] }>;
-    cancelTrip: Resolver<unknown, { launchId: string }>;
+    login: Resolver<unknown, gql.MutationLoginArgs>;
+    bookTrips: Resolver<unknown, gql.MutationBookTripsArgs>;
+    cancelTrip: Resolver<unknown, gql.MutationCancelTripArgs>;
 }

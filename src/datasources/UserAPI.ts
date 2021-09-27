@@ -22,17 +22,24 @@ export class UserAPI extends DataSource<ApolloCtx> {
         await client.$connect();
     }
 
-    async find(email: string | null) {
+    async findOrCreate(email?: string | null) {
         if (!email) {
             throw new Error('Email is null!');
         }
 
         let user = await client.user.findUnique({
-            where: { email },
+            where:   { email },
+            include: { trips: true },
         });
 
         if (user === null) {
-            user = await client.user.create({ data: { email } });
+            user = await client.user.create({
+                data: {
+                    email,
+                    trips: { create: [] },
+                },
+                include: { trips: true },
+            });
         }
 
         user.token = Buffer.from(email).toString('base64');
@@ -59,28 +66,22 @@ export class UserAPI extends DataSource<ApolloCtx> {
             throw new Error('User not found.');
         }
 
-        console.log(launchId, user.id);
-
-        // try {
         const trip = await client.trip.create({
             data: { launchId, userId: user.id },
         });
 
         return trip;
-        // } catch (error) {
-        //     console.log(error);
-        // }
     }
 
-    async cancelTrip(launchId: string) {
+    async cancelTrip(id: string) {
         this.validateAuth();
 
-        const isCanceled = await client.trip.delete({ where: { launchId } });
+        const isCanceled = await client.trip.delete({ where: { id } });
 
         return isCanceled;
     }
 
-    async getLaunchIds() {
+    async getTrips() {
         const email = this.validateAuth();
 
         const user = await client.user.findUnique({
@@ -92,9 +93,9 @@ export class UserAPI extends DataSource<ApolloCtx> {
             throw new Error('User not found.');
         }
 
-        const userTrips = user.trips;
+        const { trips } = user;
 
-        return userTrips.map(trip => trip.launchId);
+        return trips;
     }
 
     async isBookedOnLaunch(launchId: string) {

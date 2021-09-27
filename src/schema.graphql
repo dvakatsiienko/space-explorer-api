@@ -1,3 +1,5 @@
+scalar Date
+
 type Query {
     launches(pageSize: Int, after: Int): Launches!
     launch(id: ID!): Launch!
@@ -6,15 +8,21 @@ type Query {
 
 type Mutation {
     login(email: String): UserProfile!
-    bookTrips(launchIds: [ID]!): TripUpdateResponse!
-    cancelTrip(launchId: ID!): TripUpdateResponse!
+    bookTrips(launchIds: [ID!]!): TripUpdateResponse!
+    cancelTrip(tripId: ID!): TripUpdateResponse!
 }
 
 type UserProfile {
     id: ID!
     email: String!
     token: String
-    trips: [Launch!]!
+    trips: [Trip!]!
+}
+
+type Trip {
+    id: ID!
+    createdAt: Date
+    launch: Launch!
 }
 
 type Launches {

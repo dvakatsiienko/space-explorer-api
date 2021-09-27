@@ -21,11 +21,26 @@ export const Mission: TMission = {
 
 export const UserProfile: TUserProfile = {
     trips: async (_, __, { dataSources }) => {
-        const launchIds = await dataSources.userAPI.getLaunchIds();
+        const trips = await dataSources.userAPI.getTrips();
 
-        if (!launchIds.length) return [];
+        const launchIds = trips.map(trip => trip.launchId);
+        const launches = await dataSources.spaceXAPI.getLaunchesByIds(
+            launchIds,
+        );
 
-        return dataSources.spaceXAPI.getLaunchesByIds(launchIds);
+        const finalTrips = trips.map(trip => {
+            const launch = launches.find(
+                _launch => _launch.id === trip.launchId,
+            );
+
+            if (!launch) {
+                throw new Error('Launch for a trip not found.');
+            }
+
+            return { ...trip, launch };
+        });
+
+        return finalTrips;
     },
 };
 
@@ -37,5 +52,5 @@ interface TMission {
     missionPatch: Resolver<types.TMission>;
 }
 interface TUserProfile {
-    trips: Resolver<unknown>;
+    trips: Resolver;
 }

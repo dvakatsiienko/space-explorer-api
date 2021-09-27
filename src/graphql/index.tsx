@@ -9,6 +9,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Date: any;
 };
 
 export type Launch = {
@@ -48,12 +49,12 @@ export type Mutation = {
 
 
 export type MutationBookTripsArgs = {
-  launchIds: Array<Maybe<Scalars['ID']>>;
+  launchIds: Array<Scalars['ID']>;
 };
 
 
 export type MutationCancelTripArgs = {
-  launchId: Scalars['ID'];
+  tripId: Scalars['ID'];
 };
 
 
@@ -91,6 +92,13 @@ export type Rocket = {
   type: Scalars['String'];
 };
 
+export type Trip = {
+  __typename?: 'Trip';
+  createdAt: Maybe<Scalars['Date']>;
+  id: Scalars['ID'];
+  launch: Launch;
+};
+
 export type TripUpdateResponse = {
   __typename?: 'TripUpdateResponse';
   launches: Array<Launch>;
@@ -103,5 +111,5 @@ export type UserProfile = {
   email: Scalars['String'];
   id: Scalars['ID'];
   token: Maybe<Scalars['String']>;
-  trips: Array<Launch>;
+  trips: Array<Trip>;
 };
