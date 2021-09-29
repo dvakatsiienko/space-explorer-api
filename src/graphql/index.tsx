@@ -22,8 +22,8 @@ export type Launch = {
   site: Scalars['String'];
 };
 
-export type Launches = {
-  __typename?: 'Launches';
+export type LaunchesPayload = {
+  __typename?: 'LaunchesPayload';
   cursor: Scalars['Int'];
   hasMore: Scalars['Boolean'];
   list: Array<Launch>;
@@ -42,8 +42,8 @@ export type MissionMissionPatchArgs = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  bookTrips: TripUpdateResponse;
-  cancelTrip: TripUpdateResponse;
+  bookTrips: Array<Trip>;
+  cancelTrip: Scalars['Boolean'];
   login: UserProfile;
 };
 
@@ -70,7 +70,7 @@ export enum PatchSize {
 export type Query = {
   __typename?: 'Query';
   launch: Launch;
-  launches: Launches;
+  launches: LaunchesPayload;
   userProfile: Maybe<UserProfile>;
 };
 
@@ -97,13 +97,6 @@ export type Trip = {
   createdAt: Maybe<Scalars['Date']>;
   id: Scalars['ID'];
   launch: Launch;
-};
-
-export type TripUpdateResponse = {
-  __typename?: 'TripUpdateResponse';
-  launches: Array<Launch>;
-  message: Scalars['String'];
-  success: Scalars['Boolean'];
 };
 
 export type UserProfile = {

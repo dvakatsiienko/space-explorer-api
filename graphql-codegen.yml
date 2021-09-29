@@ -1,4 +1,4 @@
-schema: './src/schema.graphql'
+schema: './src/graphql/schema.graphql'
 config:
     avoidOptionals: true
 generates:

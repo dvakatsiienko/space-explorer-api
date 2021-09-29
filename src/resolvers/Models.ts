@@ -1,4 +1,5 @@
 /* Instruments */
+import { injectLaunchesIntoTrips } from '../utils';
 import { Resolver } from '../types';
 import * as gql from '../graphql';
 import * as types from '../datasources/SpaceXAPI';
@@ -21,24 +22,14 @@ export const Mission: TMission = {
 
 export const UserProfile: TUserProfile = {
     trips: async (_, __, { dataSources }) => {
-        const trips = await dataSources.userAPI.getTrips();
+        const userTrips = await dataSources.userAPI.getTrips();
 
-        const launchIds = trips.map(trip => trip.launchId);
+        const launchIds = userTrips.map(trip => trip.launchId);
         const launches = await dataSources.spaceXAPI.getLaunchesByIds(
             launchIds,
         );
 
-        const finalTrips = trips.map(trip => {
-            const launch = launches.find(
-                _launch => _launch.id === trip.launchId,
-            );
-
-            if (!launch) {
-                throw new Error('Launch for a trip not found.');
-            }
-
-            return { ...trip, launch };
-        });
+        const finalTrips = injectLaunchesIntoTrips(userTrips, launches);
 
         return finalTrips;
     },

@@ -76,9 +76,7 @@ export class UserAPI extends DataSource<ApolloCtx> {
     async cancelTrip(id: string) {
         this.validateAuth();
 
-        const isCanceled = await client.trip.delete({ where: { id } });
-
-        return isCanceled;
+        await client.trip.delete({ where: { id } });
     }
 
     async getTrips() {

@@ -13,7 +13,7 @@ import { SpaceXAPI, UserAPI } from './datasources';
 
 dotenv.config({ path: '.env.development.local' });
 
-const schema = loadSchemaSync(join(__dirname, './schema.graphql'), {
+const schema = loadSchemaSync(join(__dirname, './graphql/schema.graphql'), {
     loaders: [ new GraphQLFileLoader() ],
 }) as unknown as DocumentNode;
 

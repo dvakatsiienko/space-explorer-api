@@ -1,5 +1,6 @@
 /* Instruments */
 import * as gql from '../graphql';
+import { injectLaunchesIntoTrips } from '../utils';
 import { Resolver } from '../types';
 
 export const Mutation: TMutation = {
@@ -16,40 +17,16 @@ export const Mutation: TMutation = {
             launchIds,
         );
 
-        const success = bookedTrips.length === launchIds.length;
+        const finalTrips = injectLaunchesIntoTrips(bookedTrips, launches);
 
-        return {
-            success,
-            message: success
-                ? 'trips booked successfully'
-                : `the following launches couldn't be booked: ${launchIds.filter(
-                    id => !bookedTrips.filter(trip => String(trip.id) === id),
-                )}`,
-            launches,
-        };
+        return finalTrips;
     },
     cancelTrip: async (_, args, { dataSources }) => {
         const { tripId } = args;
 
-        const cancelledTrip = await dataSources.userAPI.cancelTrip(tripId);
+        await dataSources.userAPI.cancelTrip(tripId);
 
-        if (!cancelledTrip) {
-            return {
-                success:  false,
-                message:  'failed to cancel trip',
-                launches: [],
-            };
-        }
-
-        const launch = await dataSources.spaceXAPI.getLaunch(
-            cancelledTrip.launchId,
-        );
-
-        return {
-            success:  true,
-            message:  'trip cancelled',
-            launches: [ launch ],
-        };
+        return true;
     },
 };
 

@@ -1,15 +1,15 @@
 scalar Date
 
 type Query {
-    launches(pageSize: Int, after: Int): Launches!
+    launches(pageSize: Int, after: Int): LaunchesPayload!
     launch(id: ID!): Launch!
     userProfile: UserProfile
 }
 
 type Mutation {
     login(email: String): UserProfile!
-    bookTrips(launchIds: [ID!]!): TripUpdateResponse!
-    cancelTrip(tripId: ID!): TripUpdateResponse!
+    bookTrips(launchIds: [ID!]!): [Trip!]!
+    cancelTrip(tripId: ID!): Boolean!
 }
 
 type UserProfile {
@@ -19,16 +19,10 @@ type UserProfile {
     trips: [Trip!]!
 }
 
-type Trip {
+type Rocket {
     id: ID!
-    createdAt: Date
-    launch: Launch!
-}
-
-type Launches {
-    cursor: Int!
-    hasMore: Boolean!
-    list: [Launch!]!
+    name: String!
+    type: String!
 }
 
 type Launch {
@@ -40,21 +34,21 @@ type Launch {
     rocket: Rocket!
 }
 
-type Rocket {
+type LaunchesPayload {
+    cursor: Int!
+    hasMore: Boolean!
+    list: [Launch!]!
+}
+
+type Trip {
     id: ID!
-    name: String!
-    type: String!
+    createdAt: Date
+    launch: Launch!
 }
 
 type Mission {
     name: String!
     missionPatch(size: PatchSize): String!
-}
-
-type TripUpdateResponse {
-    success: Boolean!
-    message: String!
-    launches: [Launch!]!
 }
 
 enum PatchSize {
