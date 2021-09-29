@@ -6,6 +6,7 @@ import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
 import isEmail from 'isemail';
 import dotenv from 'dotenv';
 import type { DocumentNode } from 'graphql';
+import chalk from 'chalk';
 
 /* Instruments */
 import { resolvers } from './resolvers';
@@ -43,6 +44,10 @@ apolloServer.listen({ port: PORT }).then(data => {
     const HOST = isProd ? 'the-space-explorer-api.herokuapp.com' : 'localhost';
 
     console.log(
-        `🚀 Server ready at ${protocol}://${HOST}:${data.port}${apolloServer.graphqlPath}`,
+        chalk.cyanBright(
+            `🚀 Server ready at ${chalk.blueBright(
+                `${protocol}://${HOST}:${data.port}${apolloServer.graphqlPath}`,
+            )}`,
+        ),
     );
 });

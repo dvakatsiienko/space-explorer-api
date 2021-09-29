@@ -37,7 +37,7 @@ export type Mission = {
 
 
 export type MissionMissionPatchArgs = {
-  size: Maybe<PatchSize>;
+  size?: Maybe<PatchSize>;
 };
 
 export type Mutation = {
@@ -59,7 +59,7 @@ export type MutationCancelTripArgs = {
 
 
 export type MutationLoginArgs = {
-  email: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
 };
 
 export enum PatchSize {
@@ -81,8 +81,8 @@ export type QueryLaunchArgs = {
 
 
 export type QueryLaunchesArgs = {
-  after: Maybe<Scalars['Int']>;
-  pageSize: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['Int']>;
+  pageSize?: Maybe<Scalars['Int']>;
 };
 
 export type Rocket = {
@@ -94,7 +94,7 @@ export type Rocket = {
 
 export type Trip = {
   __typename?: 'Trip';
-  createdAt: Maybe<Scalars['Date']>;
+  createdAt?: Maybe<Scalars['Date']>;
   id: Scalars['ID'];
   launch: Launch;
 };
@@ -103,6 +103,6 @@ export type UserProfile = {
   __typename?: 'UserProfile';
   email: Scalars['String'];
   id: Scalars['ID'];
-  token: Maybe<Scalars['String']>;
+  token?: Maybe<Scalars['String']>;
   trips: Array<Trip>;
 };
