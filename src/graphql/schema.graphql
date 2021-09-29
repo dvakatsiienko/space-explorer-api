@@ -3,7 +3,7 @@ scalar Date
 type Query {
     launches(pageSize: Int, after: Int): LaunchesPayload!
     launch(id: ID!): Launch!
-    userProfile: UserProfile
+    userProfile: UserProfile!
 }
 
 type Mutation {
