@@ -2,7 +2,7 @@
 import { paginate } from '../utils';
 import { Resolver } from '../types';
 
-export const Query: TQuery = {
+export const Query: QueryResolvers = {
     launches: async (_, { pageSize = 20, after }, { dataSources }) => {
         const launches = await dataSources.spaceXAPI.getLaunches();
 
@@ -32,7 +32,7 @@ export const Query: TQuery = {
 };
 
 /* Types */
-interface TQuery {
+interface QueryResolvers {
     launches: Resolver<unknown, { pageSize: number; after: number }>;
     launch: Resolver<unknown, { id: string }>;
     userProfile: Resolver;

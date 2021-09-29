@@ -3,7 +3,7 @@ import * as gql from '../graphql';
 import { injectLaunchesIntoTrips } from '../utils';
 import { Resolver } from '../types';
 
-export const Mutation: TMutation = {
+export const Mutation: MutationResolvers = {
     login: async (_, args, { dataSources }) => {
         const userProfile = await dataSources.userAPI.findOrCreate(args.email);
 
@@ -31,7 +31,7 @@ export const Mutation: TMutation = {
 };
 
 /* Types */
-interface TMutation {
+interface MutationResolvers {
     login: Resolver<unknown, gql.MutationLoginArgs>;
     bookTrips: Resolver<unknown, gql.MutationBookTripsArgs>;
     cancelTrip: Resolver<unknown, gql.MutationCancelTripArgs>;

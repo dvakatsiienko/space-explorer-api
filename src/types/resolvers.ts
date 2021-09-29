@@ -1,5 +1,5 @@
 /* Core */
-import { GraphQLFieldResolver } from 'graphql';
+import type { GraphQLFieldResolver } from 'graphql';
 
 /* Instruments */
 import { SpaceXAPI, UserAPI } from '../datasources';
