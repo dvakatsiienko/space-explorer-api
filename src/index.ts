@@ -34,7 +34,8 @@ const apolloServer = new ApolloServer({
     }),
 });
 
-const { PORT } = process.env;
+/* eslint-disable-next-line prefer-destructuring */
+const PORT = process.env.PORT;
 
 apolloServer.listen({ port: PORT }).then(data => {
     const isProd = process.env.NODE_ENV === 'production';
