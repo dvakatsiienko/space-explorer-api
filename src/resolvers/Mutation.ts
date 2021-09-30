@@ -1,7 +1,7 @@
 /* Instruments */
-import * as gql from '../graphql';
+import type * as gql from '../graphql';
+import type { Resolver } from '../types';
 import { injectLaunchesIntoTrips } from '../utils';
-import { Resolver } from '../types';
 
 export const Mutation: MutationResolvers = {
     login: async (_, args, { dataSources }) => {
@@ -32,7 +32,7 @@ export const Mutation: MutationResolvers = {
 
 /* Types */
 interface MutationResolvers {
-    login: Resolver<unknown, gql.MutationLoginArgs>;
-    bookTrips: Resolver<unknown, gql.MutationBookTripsArgs>;
-    cancelTrip: Resolver<unknown, gql.MutationCancelTripArgs>;
+    login: Resolver<gql.MutationLoginArgs>;
+    bookTrips: Resolver<gql.MutationBookTripsArgs>;
+    cancelTrip: Resolver<gql.MutationCancelTripArgs>;
 }

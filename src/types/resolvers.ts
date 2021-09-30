@@ -5,8 +5,8 @@ import type { GraphQLFieldResolver } from 'graphql';
 import { SpaceXAPI, UserAPI } from '../datasources';
 
 export type Resolver<
-    TSource = unknown,
     TArgs = { [argName: string]: any },
+    TSource = undefined,
 > = GraphQLFieldResolver<TSource, ResolverCtx, TArgs>;
 
 export interface ApolloCtx {

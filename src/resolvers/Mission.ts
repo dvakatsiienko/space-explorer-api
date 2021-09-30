@@ -1,9 +1,10 @@
 /* Instruments */
-import { Resolver } from '../types';
+import * as gql from '../graphql';
+import type { Resolver } from '../types';
 import * as types from '../datasources/SpaceXAPI';
 
 export const Mission: MissionResolvers = {
-    missionPatch: (mission, args = { size: 'LARGE' }) => {
+    missionPatch: (mission, args = { size: gql.PatchSize.Large }) => {
         const { size } = args;
 
         return size === 'SMALL'
@@ -14,5 +15,5 @@ export const Mission: MissionResolvers = {
 
 /* Types */
 interface MissionResolvers {
-    missionPatch: Resolver<types.TMission>;
+    missionPatch: Resolver<gql.MissionMissionPatchArgs, types.TMission>;
 }

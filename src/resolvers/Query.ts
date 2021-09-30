@@ -1,15 +1,16 @@
 /* Instruments */
+import type * as gql from '../graphql';
+import type { Resolver } from '../types';
 import { paginate } from '../utils';
-import { Resolver } from '../types';
 
 export const Query: QueryResolvers = {
-    launches: async (_, { pageSize = 20, after }, { dataSources }) => {
+    launches: async (_, args, { dataSources }) => {
         const launches = await dataSources.spaceXAPI.getLaunches();
 
         const list = paginate({
-            after,
-            pageSize,
-            results: launches,
+            after:    args.after ?? 0,
+            pageSize: args.pageSize ?? 10,
+            results:  launches,
         });
 
         return {
@@ -33,7 +34,7 @@ export const Query: QueryResolvers = {
 
 /* Types */
 interface QueryResolvers {
-    launches: Resolver<unknown, { pageSize: number; after: number }>;
-    launch: Resolver<unknown, { id: string }>;
+    launches: Resolver<gql.QueryLaunchesArgs>;
+    launch: Resolver<gql.QueryLaunchArgs>;
     userProfile: Resolver;
 }
