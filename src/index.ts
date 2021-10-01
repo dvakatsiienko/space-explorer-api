@@ -41,7 +41,9 @@ const PORT = process.env.PORT;
 apolloServer.listen({ port: PORT }).then(data => {
     const isProd = process.env.NODE_ENV === 'production';
     const protocol = isProd ? 'https' : 'http';
-    const HOST = isProd ? 'the-space-explorer-api.herokuapp.com' : 'localhost';
+    const HOST = isProd
+        ? 'space-explorer-api-production.up.railway.app'
+        : 'localhost';
 
     console.log(
         chalk.cyanBright(
