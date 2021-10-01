@@ -1,4 +1,4 @@
-# SpaceX Explorer API
+# Space Explorer API
 
 Built with the following technology stack:
 
@@ -7,6 +7,7 @@ Built with the following technology stack:
 -   Apollo Client
 -   Apollo Server
 -   Apollo Datasource
+-   Official SpaceX API (v4, v5)
 -   SQLite DB
 -   Prisma ORM
 -   Vercel cloud deployment for UI
