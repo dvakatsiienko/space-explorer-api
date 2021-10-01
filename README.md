@@ -12,4 +12,4 @@ Built with the following technology stack:
 -   Vercel cloud deployment for UI
 -   Railway cloud deployment for API
 
-The frontend (UI) for this project is [located here](https://github.com/dvakatsiienko/space-explorer-ui).
+The _frontend_ (_UI_) for this project is [located here](https://github.com/dvakatsiienko/space-explorer-ui).
