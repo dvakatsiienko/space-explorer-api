@@ -7,7 +7,9 @@ Built with the following technology stack:
 -   Apollo Client
 -   Apollo Server
 -   Apollo Datasource
--   Prisma ORM
 -   SQLite DB
--   Vercel for UI
--   Heroku for API
+-   Prisma ORM
+-   Vercel cloud deployment for UI
+-   Railway cloud deployment for API
+
+The frontend (UI) for this project is [located here](https://github.com/dvakatsiienko/space-explorer-ui).
