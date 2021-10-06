@@ -8,23 +8,23 @@
         "codegen:graphql": "graphql-codegen --config \"./graphql-codegen.yml\""
     },
     "dependencies": {
-        "@graphql-tools/graphql-file-loader": "7.1.0",
+        "@graphql-tools/graphql-file-loader": "7.3.0",
         "@graphql-tools/load": "7.3.2",
-        "@prisma/client": "3.1.1",
+        "@prisma/client": "3.2.0",
         "apollo-datasource": "3.1.0",
         "apollo-datasource-rest": "3.2.0",
         "apollo-server": "3.3.0",
         "chalk": "4.1.2",
         "dotenv": "10.0.0",
-        "graphql": "15.6.0",
+        "graphql": "15.6.1",
         "isemail": "3.2.0",
-        "prisma": "3.1.1",
+        "prisma": "3.2.0",
         "ts-node-dev": "1.1.8"
     },
     "devDependencies": {
         "@graphql-codegen/cli": "2.2.0",
         "@graphql-codegen/typescript": "2.2.2",
-        "@types/node": "16.10.2",
+        "@types/node": "16.10.3",
         "eslint": "7.32.0",
         "eslint-config-dva": "0.0.13",
         "typescript": "4.4.3"
