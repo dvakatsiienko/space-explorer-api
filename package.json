@@ -11,7 +11,7 @@
     "dependencies": {
         "@graphql-tools/graphql-file-loader": "7.3.0",
         "@graphql-tools/load": "7.3.2",
-        "@prisma/client": "3.2.0",
+        "@prisma/client": "3.2.1",
         "apollo-datasource": "3.1.0",
         "apollo-datasource-rest": "3.2.0",
         "apollo-server": "3.3.0",
@@ -20,7 +20,7 @@
         "dotenv": "10.0.0",
         "graphql": "15.6.1",
         "isemail": "3.2.0",
-        "prisma": "3.2.0",
+        "prisma": "3.2.1",
         "release-it": "14.11.6",
         "ts-node-dev": "1.1.8"
     },
