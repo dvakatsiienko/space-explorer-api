@@ -10,7 +10,7 @@
     },
     "dependencies": {
         "@graphql-tools/graphql-file-loader": "7.3.1",
-        "@graphql-tools/load": "7.3.2",
+        "@graphql-tools/load": "7.4.0",
         "@prisma/client": "3.3.0",
         "apollo-datasource": "3.2.0",
         "apollo-datasource-rest": "3.3.0",
@@ -27,8 +27,8 @@
     "devDependencies": {
         "@graphql-codegen/cli": "2.2.1",
         "@graphql-codegen/typescript": "2.2.4",
-        "@types/node": "16.11.1",
-        "eslint": "8.0.1",
+        "@types/node": "16.11.4",
+        "eslint": "8.1.0",
         "eslint-config-dva": "0.0.13",
         "typescript": "4.4.4"
     }
