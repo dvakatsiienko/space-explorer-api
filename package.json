@@ -27,7 +27,7 @@
     "devDependencies": {
         "@graphql-codegen/cli": "2.2.1",
         "@graphql-codegen/typescript": "2.2.4",
-        "@types/node": "16.11.4",
+        "@types/node": "16.11.6",
         "eslint": "8.1.0",
         "eslint-config-dva": "0.0.13",
         "typescript": "4.4.4"
