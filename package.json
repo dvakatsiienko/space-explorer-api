@@ -9,8 +9,8 @@
         "release": "release-it --ci"
     },
     "dependencies": {
-        "@graphql-tools/graphql-file-loader": "7.3.1",
-        "@graphql-tools/load": "7.4.0",
+        "@graphql-tools/graphql-file-loader": "7.3.2",
+        "@graphql-tools/load": "7.4.1",
         "@prisma/client": "3.3.0",
         "apollo-datasource": "3.2.0",
         "apollo-datasource-rest": "3.3.0",
@@ -18,7 +18,7 @@
         "auto-changelog": "2.3.0",
         "chalk": "4.1.2",
         "dotenv": "10.0.0",
-        "graphql": "15.6.1",
+        "graphql": "15.7.2",
         "isemail": "3.2.0",
         "prisma": "3.3.0",
         "release-it": "14.11.6",
