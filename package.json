@@ -11,25 +11,25 @@
     "dependencies": {
         "@graphql-tools/graphql-file-loader": "7.3.2",
         "@graphql-tools/load": "7.4.1",
-        "@prisma/client": "3.3.0",
+        "@prisma/client": "3.4.0",
         "apollo-datasource": "3.2.0",
         "apollo-datasource-rest": "3.3.0",
         "apollo-server": "3.4.0",
         "auto-changelog": "2.3.0",
         "chalk": "4.1.2",
         "dotenv": "10.0.0",
-        "graphql": "15.7.2",
+        "graphql": "16.0.1",
         "isemail": "3.2.0",
-        "prisma": "3.3.0",
+        "prisma": "3.4.0",
         "release-it": "14.11.6",
         "ts-node-dev": "1.1.8"
     },
     "devDependencies": {
-        "@graphql-codegen/cli": "2.2.1",
-        "@graphql-codegen/typescript": "2.2.4",
+        "@graphql-codegen/cli": "2.2.2",
+        "@graphql-codegen/typescript": "2.3.0",
         "@types/node": "16.11.6",
         "eslint": "8.1.0",
-        "eslint-config-dva": "0.0.13",
+        "eslint-config-dva": "0.0.15",
         "typescript": "4.4.4"
     }
 }
